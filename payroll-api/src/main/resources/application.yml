@@ -1,0 +1,27 @@
+info:
+  app:
+    name: '@project.artifactId@'
+    description: '@project.description@'
+    version: '@project.version@'
+
+server:
+  port: 8081
+
+logging:
+  level:
+    root: :INFO
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        order_updates: true
+        order_inserts: true
+        open-in-view: false
+        jdbc.time_zone: UTC
+        jdbc.batch_size: 30
+        globally_quoted_identifiers: true
+      org.hibernate.flushMode: COMMIT
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
