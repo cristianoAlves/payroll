@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  payroll-api:
+    image: payroll-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://payroll-postgres:5432/payrolldb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+    depends_on:
+      - payroll-postgres
+
+  payroll-postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: payrolldb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - payroll-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  payroll-postgres-data:

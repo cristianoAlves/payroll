@@ -11,8 +11,12 @@ logging:
   level:
     root: :INFO
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payrolldb
+    username: payrolluser
+    password: payrollpass
+    driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: false
     properties:
       hibernate:
         order_updates: true
@@ -22,6 +26,11 @@ spring:
         jdbc.batch_size: 30
         globally_quoted_identifiers: true
       org.hibernate.flushMode: COMMIT
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
+      ddl-auto: update # Or 'validate' for production
+      #ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
