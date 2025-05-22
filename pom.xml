@@ -22,7 +22,7 @@
         <spring-boot.version>3.4.4</spring-boot.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
         <lombok.version>1.18.28</lombok.version>
-        <h2.version>2.3.232</h2.version>
+        <postgresql.version>42.5.0</postgresql.version>
     </properties>
 
     <modules>
@@ -54,10 +54,9 @@
                 <version>${lombok.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2.version}</version>
-                <scope>runtime</scope>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version> <!-- or the latest version -->
             </dependency>
             <dependency>
                 <groupId>com.example</groupId>
@@ -68,6 +67,15 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -81,20 +89,6 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
