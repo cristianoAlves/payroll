@@ -13,8 +13,8 @@ logging:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/payrolldb
-    username: payrolluser
-    password: payrollpass
+    username: postgres
+    password: mysecretpassword
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
@@ -29,8 +29,9 @@ spring:
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update # Or 'validate' for production
-      #ddl-auto: none
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml

@@ -19,8 +19,8 @@ docker run -p 8081:8081 payroll-api
 ```
 docker run --name payroll-postgres \
   -e POSTGRES_DB=payrolldb \
-  -e POSTGRES_USER=payrolluser \
-  -e POSTGRES_PASSWORD=payrollpass \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=mysecretpassword \
   -p 5432:5432 \
   -d postgres:15
 ```
