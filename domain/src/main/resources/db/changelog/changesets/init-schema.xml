@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="202505230957" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="employee_seq"/>
+            </not>
+        </preConditions>
+        <!-- Create sequence for ID generation -->
+        <createSequence
+          sequenceName="employee_seq"
+          startValue="1"
+          maxValue="999999"
+          minValue="1"
+          incrementBy="1"/>
+    </changeSet>
+    <changeSet id="202505231004" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="employee"/>
+            </not>
+        </preConditions>
+        <!-- Create employee table -->
+        <createTable tableName="employee">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Add default value using the sequence (PostgreSQL specific) -->
+        <addDefaultValue
+          tableName="employee"
+          columnName="id"
+          defaultValueComputed="nextval('employee_seq')"/>
+    </changeSet>
+    <changeSet id="202505231025" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM employee;
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="employee">
+            <column name="name" value="Bilbo Baggins"/>
+            <column name="role" value="burglar"/>
+        </insert>
+
+        <insert tableName="employee">
+            <column name="name" value="Frodo Baggins"/>
+            <column name="role" value="thief"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
