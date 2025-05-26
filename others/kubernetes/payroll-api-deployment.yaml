@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payroll-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payroll-api
+  template:
+    metadata:
+      labels:
+        app: payroll-api
+    spec:
+      containers:
+        - name: payroll-api
+          image: payroll-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://payroll-postgres:5432/payrolldb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: mysecretpassword

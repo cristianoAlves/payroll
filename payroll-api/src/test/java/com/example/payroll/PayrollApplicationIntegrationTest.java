@@ -1,0 +1,32 @@
+package com.example.payroll;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.example.payroll.domain.entity.Employee;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class PayrollIntegrationTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void shouldCreateAndReturnEmployee() {
+        Employee emp = Employee.builder()
+            .name("Alice")
+            .role("developer")
+            .build();
+        var response = restTemplate.postForEntity("/employees", emp, Employee.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        assertEquals("Alice", response.getBody().getName());
+        assertEquals("developer", response.getBody().getRole());
+    }
+}

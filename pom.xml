@@ -24,6 +24,7 @@
         <lombok.version>1.18.28</lombok.version>
         <postgresql.version>42.5.0</postgresql.version>
         <liquibase.version>4.32.0</liquibase.version>
+        <h2.version>2.3.232</h2.version>
     </properties>
 
     <modules>
@@ -47,6 +48,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-hateoas</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+                <scope>test</scope>
             </dependency>
             <!-- Lombok -->
             <dependency>
