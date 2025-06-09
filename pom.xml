@@ -2,12 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-<!--    <parent>-->
-<!--        <groupId>org.springframework.boot</groupId>-->
-<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
-<!--        <version>3.4.5</version>-->
-<!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
-<!--    </parent>-->
     <groupId>com.example</groupId>
     <artifactId>payroll</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -45,6 +39,11 @@
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
+            <!-- 
+            HATEOAS stands for Hypermedia as the Engine of Application State. It's a constraint of the REST application 
+            architecture where the server provides information (hypermedia links) in the responses that guide the client 
+            on what it can do next.
+             -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-hateoas</artifactId>
@@ -71,7 +70,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>${postgresql.version}</version> <!-- or the latest version -->
+                <version>${postgresql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.example</groupId>
@@ -124,5 +123,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
