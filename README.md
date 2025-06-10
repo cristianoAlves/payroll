@@ -7,6 +7,15 @@ https://spring.io/guides/tutorials/rest
 ```
 docker compose up -d --build
 ```
+#### Test API
+`curl http://localhost:8081/employees`
+
+#### Test using actuator
+`curl http://localhost:8081/actuator`
+
+#### API documentation
+http://localhost:8081/swagger-ui/index.html
+
 ### Option2:  Running the application using kubernetes
 https://minikube.sigs.k8s.io/docs/start/
 #### What you’ll need
@@ -41,3 +50,9 @@ API is running on port 30081
 
 #### Test API
 `curl http://{minikube-pi}:30081/employees`
+
+### Test using actuator
+`curl http://{minikube-pi}:30081/actuator`
+
+### API documentation
+http://{minikube-pi}:30081/swagger-ui/index.html

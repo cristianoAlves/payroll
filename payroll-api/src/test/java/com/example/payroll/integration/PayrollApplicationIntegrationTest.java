@@ -1,4 +1,4 @@
-package com.example.payroll;
+package com.example.payroll.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
