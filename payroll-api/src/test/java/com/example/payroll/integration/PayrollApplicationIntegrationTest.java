@@ -2,7 +2,7 @@ package com.example.payroll.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.payroll.domain.entity.Employee;
+import com.example.payroll.adapters.outbound.persistence.employee.entity.EmployeeEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ class PayrollIntegrationTest {
 
     @Test
     void shouldCreateAndReturnEmployee() {
-        Employee emp = Employee.builder()
+        EmployeeEntity emp = EmployeeEntity.builder()
             .name("Alice")
             .role("developer")
             .build();
-        var response = restTemplate.postForEntity("/employees", emp, Employee.class);
+        var response = restTemplate.postForEntity("/employees", emp, EmployeeEntity.class);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Assertions.assertNotNull(response.getBody());
