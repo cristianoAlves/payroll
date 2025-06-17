@@ -11,6 +11,8 @@ logging:
   level:
     root: :INFO
 spring:
+  application:
+    name: payroll
   datasource:
     url: jdbc:postgresql://localhost:5432/payrolldb
     username: postgres

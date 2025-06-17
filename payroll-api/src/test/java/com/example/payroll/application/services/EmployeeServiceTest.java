@@ -2,8 +2,12 @@ package com.example.payroll.application.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.payroll.domain.contract.model.Contract;
+import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import com.example.payroll.domain.employee.port.out.EmployeeRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +67,8 @@ class EmployeeServiceTest {
     }
 
     private Employee createEmployee(long id) {
-        return new Employee(id, "Alice", "developer", null);
+        BankAccount bankAccount = new BankAccount("123", "456");
+        Contract contract = new Contract(10L, new BigDecimal(5000L), LocalDate.now(), LocalDate.now(), true);
+        return new Employee(id, "Alice", bankAccount, contract);
     }
 }

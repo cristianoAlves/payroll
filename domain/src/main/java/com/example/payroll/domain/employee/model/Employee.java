@@ -5,7 +5,7 @@ import com.example.payroll.domain.contract.model.Contract;
 public record Employee(
     Long id,
     String name,
-    String role,
+    BankAccount bankAccount,
     Contract contract
 ) {
 

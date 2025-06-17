@@ -20,13 +20,11 @@ class PayrollIntegrationTest {
     void shouldCreateAndReturnEmployee() {
         EmployeeEntity emp = EmployeeEntity.builder()
             .name("Alice")
-            .role("developer")
             .build();
         var response = restTemplate.postForEntity("/employees", emp, EmployeeEntity.class);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Assertions.assertNotNull(response.getBody());
         assertEquals("Alice", response.getBody().getName());
-        assertEquals("developer", response.getBody().getRole());
     }
 }
