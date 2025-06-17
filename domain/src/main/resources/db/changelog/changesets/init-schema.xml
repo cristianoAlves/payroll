@@ -5,7 +5,93 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="202505230957" author="alvcris">
+    <changeSet id="202506171000" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="contract_seq"/>
+            </not>
+        </preConditions>
+        <!-- Create sequence for ID generation -->
+        <createSequence
+          sequenceName="contract_seq"
+          startValue="1"
+          maxValue="999999"
+          minValue="1"
+          incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="202506171001" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contract"/>
+            </not>
+        </preConditions>
+
+        <!-- Create contract table -->
+        <createTable tableName="contract">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="startDate" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endDate" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addDefaultValue
+          tableName="contract"
+          columnName="id"
+          defaultValueComputed="nextval('contract_seq')"/>
+    </changeSet>
+
+    <changeSet id="202506171002" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="bank_account_seq"/>
+            </not>
+        </preConditions>
+        <!-- Create sequence for ID generation -->
+        <createSequence
+          sequenceName="bank_account_seq"
+          startValue="1"
+          maxValue="999999"
+          minValue="1"
+          incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="202506171003" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="bank_account"/>
+            </not>
+        </preConditions>
+
+        <!-- Create bank_account table -->
+        <createTable tableName="bank_account">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addDefaultValue
+          tableName="bank_account"
+          columnName="id"
+          defaultValueComputed="nextval('bank_account_seq')"/>
+    </changeSet>
+
+    <changeSet id="202506171004" author="alvcris">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="employee_seq"/>
@@ -19,12 +105,13 @@
           minValue="1"
           incrementBy="1"/>
     </changeSet>
-    <changeSet id="202505231004" author="alvcris">
+    <changeSet id="202505231005" author="alvcris">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="employee"/>
             </not>
         </preConditions>
+
         <!-- Create employee table -->
         <createTable tableName="employee">
             <column name="id" type="BIGINT">
@@ -33,8 +120,13 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="role" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+            <column name="contract_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_employee_contract"
+                  referencedTableName="contract" referencedColumnNames="id"/>
+            </column>
+            <column name="bank_account_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_employee_bank_account"
+                  referencedTableName="bank_account" referencedColumnNames="id"/>
             </column>
         </createTable>
 
@@ -44,21 +136,50 @@
           columnName="id"
           defaultValueComputed="nextval('employee_seq')"/>
     </changeSet>
-    <changeSet id="202505231025" author="alvcris">
+
+    <changeSet id="202506171006" author="alvcris">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM employee;
-            </sqlCheck>
+            <not>
+                <sequenceExists sequenceName="payroll_seq"/>
+            </not>
         </preConditions>
 
-        <insert tableName="employee">
-            <column name="name" value="Bilbo Baggins"/>
-            <column name="role" value="burglar"/>
-        </insert>
+        <!-- Create sequence for ID generation -->
+        <createSequence
+          sequenceName="payroll_seq"
+          startValue="1"
+          maxValue="999999"
+          minValue="1"
+          incrementBy="1"/>
+    </changeSet>
 
-        <insert tableName="employee">
-            <column name="name" value="Frodo Baggins"/>
-            <column name="role" value="thief"/>
-        </insert>
+    <!-- Create payroll table -->
+    <changeSet id="202506171007" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payroll"/>
+            </not>
+        </preConditions>
+
+        <!-- Create contract table -->
+        <createTable tableName="payroll">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="employee_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_payroll_employee"
+                  referencedTableName="employee" referencedColumnNames="id"/>
+            </column>
+            <column name="period" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addDefaultValue
+          tableName="payroll"
+          columnName="id"
+          defaultValueComputed="nextval('payroll_seq')"/>
     </changeSet>
 </databaseChangeLog>
