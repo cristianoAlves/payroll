@@ -20,6 +20,7 @@ class PayrollIntegrationTest {
     void shouldCreateAndReturnEmployee() {
         EmployeeEntity emp = EmployeeEntity.builder()
             .name("Alice")
+            .cpf("cpf123")
             .build();
         var response = restTemplate.postForEntity("/employees", emp, EmployeeEntity.class);
 
