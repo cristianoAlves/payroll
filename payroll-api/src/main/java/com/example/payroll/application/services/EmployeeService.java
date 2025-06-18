@@ -2,6 +2,7 @@ package com.example.payroll.application.services;
 
 import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.exception.EmployeeNotFoundException;
+import com.example.payroll.domain.employee.exception.EmployeeWithSameCpfException;
 import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import com.example.payroll.domain.employee.port.in.EmployeeUseCase;
@@ -9,6 +10,7 @@ import com.example.payroll.domain.employee.port.out.EmployeeRepository;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +23,12 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee saveEmployee(Employee employee) {
         log.info("Saving employee {}", employee);
-        return employeeRepository.save(employee);
+        try {
+            return employeeRepository.save(employee);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Cannot be more than one Employee with the same cpf [{}]. Error: [{}]", employee.cpf(), e.getMessage());
+            throw new EmployeeWithSameCpfException(employee.cpf());
+        }
     }
 
     @Override
@@ -60,10 +67,10 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee assignContract(Contract contract, Long id) {
         log.info("Assigning Contract [{}] to Employee with id {}", contract, id);
-        Employee updatedEmployee = getById(id).assignContract(contract);
-        saveEmployee(updatedEmployee);
-        log.info("Employee [{}] was updated with Contract [{}]", updatedEmployee.id(), contract);
-        return updatedEmployee;
+        Employee toBeUpdated = getById(id).assignContract(contract);
+        Employee savedEmployee = saveEmployee(toBeUpdated);
+        log.info("Employee [{}] was updated with Contract [{}]", savedEmployee.id(), contract);
+        return savedEmployee;
     }
 
     @Override

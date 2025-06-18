@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.exception.EmployeeNotFoundException;
+import com.example.payroll.domain.employee.exception.EmployeeWithSameCpfException;
 import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import com.example.payroll.domain.employee.port.out.EmployeeRepository;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -48,6 +52,21 @@ class EmployeeServiceTest {
 
         Employee result = payrollService.saveEmployee(emp);
         Assertions.assertEquals(EMP_NAME, result.name());
+    }
+
+    @Test
+    public void shouldGetErrorWhenSavingAnEmployeeWithSameCpf() {
+        Employee emp1 = createEmployee(1L, EMP_NAME);
+        Employee emp2 = createEmployee(2L, EMP_NAME);
+        Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
+        Mockito.when(employeeRepository.save(emp2)).thenThrow(DataIntegrityViolationException.class);
+
+        payrollService.saveEmployee(emp1);
+        EmployeeWithSameCpfException exception = assertThrows(EmployeeWithSameCpfException.class, () -> {
+            payrollService.saveEmployee(emp2);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("Cannot be more than one Employee with the same cpf [cpf123]");
     }
 
     @Test
@@ -90,7 +109,7 @@ class EmployeeServiceTest {
 
         Employee expected = emp.assignContract(contract);
         Mockito.when(employeeRepository.findById(emp.id())).thenReturn(Optional.of(emp));
-        Mockito.when(employeeRepository.save(emp)).thenReturn(expected);
+        Mockito.when(employeeRepository.save(expected)).thenReturn(expected);
 
         Employee result = payrollService.assignContract(contract, emp.id());
         assertThat(expected.name()).isEqualTo(result.name());
