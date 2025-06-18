@@ -1,5 +1,6 @@
 package com.example.payroll.adapters.outbound.persistence.contract.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +35,11 @@ public class ContractEntity {
     private Long id;
 
     private BigDecimal salary;
+
+    @Column(name = "start_date")
     private LocalDate startDate;
+
+    @Column(name = "end_date")
     private LocalDate endDate;
     private boolean active;
 }

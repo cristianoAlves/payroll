@@ -32,10 +32,10 @@
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="startDate" type="DATE">
+            <column name="start_date" type="DATE">
                 <constraints nullable="false"/>
             </column>
-            <column name="endDate" type="DATE">
+            <column name="end_date" type="DATE">
                 <constraints nullable="true"/>
             </column>
             <column name="salary" type="BIGINT">
