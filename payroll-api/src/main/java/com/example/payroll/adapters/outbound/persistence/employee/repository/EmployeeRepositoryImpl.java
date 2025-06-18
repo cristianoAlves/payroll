@@ -35,4 +35,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return employeeRepositoryJpa.findById(id)
             .map(employeeMapper::fromEntity);
     }
+
+    @Override
+    public void removeEmployee(Long id) {
+        employeeRepositoryJpa.deleteById(id);
+    }
 }

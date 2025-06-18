@@ -2,6 +2,7 @@ package com.example.payroll.adapters.outbound.persistence.employee.entity;
 
 import com.example.payroll.adapters.outbound.persistence.contract.entity.ContractEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +37,9 @@ public class EmployeeEntity {
     private Long id;
 
     private String name;
+
+    @Column(unique = true, nullable = false)
+    private String cpf;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contract_id")

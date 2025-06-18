@@ -1,6 +1,8 @@
 package com.example.payroll.application.services;
 
+import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.exception.EmployeeNotFoundException;
+import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import com.example.payroll.domain.employee.port.in.EmployeeUseCase;
 import com.example.payroll.domain.employee.port.out.EmployeeRepository;
@@ -16,11 +18,20 @@ public class EmployeeService implements EmployeeUseCase {
 
     private final EmployeeRepository employeeRepository;
 
+    @Override
     public Employee saveEmployee(Employee employee) {
         log.info("Saving employee {}", employee);
         return employeeRepository.save(employee);
     }
 
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        //TODO: validate id
+        getById(employee.id());
+        return employeeRepository.save(employee);
+    }
+
+    @Override
     public Collection<Employee> getAllEmployees() {
         log.info("Getting all employees");
         Collection<Employee> all = employeeRepository.findAll();
@@ -28,6 +39,7 @@ public class EmployeeService implements EmployeeUseCase {
         return all;
     }
 
+    @Override
     public Employee getById(Long id) {
         log.info("Attempt to retrieve Employee with id {}", id);
         return employeeRepository.findById(id)
@@ -35,5 +47,31 @@ public class EmployeeService implements EmployeeUseCase {
                 log.error("Employee {} has not been found", id);
                 return new EmployeeNotFoundException(id);
             });
+    }
+
+    @Override
+    public void removeEmployee(Long id) {
+        log.info("Removing Employee with id {}", id);
+        getById(id);
+        employeeRepository.removeEmployee(id);
+        log.info("Employee removed");
+    }
+
+    @Override
+    public Employee assignContract(Contract contract, Long id) {
+        log.info("Assigning Contract [{}] to Employee with id {}", contract, id);
+        Employee updatedEmployee = getById(id).assignContract(contract);
+        saveEmployee(updatedEmployee);
+        log.info("Employee [{}] was updated with Contract [{}]", updatedEmployee.id(), contract);
+        return updatedEmployee;
+    }
+
+    @Override
+    public Employee assignBankAccount(BankAccount bankAccount, Long id) {
+        log.info("Assigning Bank Account [{}] to Employee with id {}", bankAccount, id);
+        Employee updatedEmployee = getById(id).assignBankAccount(bankAccount);
+        saveEmployee(updatedEmployee);
+        log.info("Employee [{}] was updated with bank account [{}]", updatedEmployee.id(), bankAccount);
+        return updatedEmployee;
     }
 }
