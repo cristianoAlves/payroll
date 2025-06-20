@@ -1,6 +1,5 @@
 package com.example.payroll.application.services;
 
-import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.exception.EmployeeNotFoundException;
 import com.example.payroll.domain.employee.exception.EmployeeWithSameCpfException;
 import com.example.payroll.domain.employee.model.BankAccount;
@@ -62,15 +61,6 @@ public class EmployeeService implements EmployeeUseCase {
         getById(id);
         employeeRepository.removeEmployee(id);
         log.info("Employee removed");
-    }
-
-    @Override
-    public Employee assignContract(Contract contract, Long id) {
-        log.info("Assigning Contract [{}] to Employee with id {}", contract, id);
-        Employee toBeUpdated = getById(id).assignContract(contract);
-        Employee savedEmployee = saveEmployee(toBeUpdated);
-        log.info("Employee [{}] was updated with Contract [{}]", savedEmployee.id(), contract);
-        return savedEmployee;
     }
 
     @Override

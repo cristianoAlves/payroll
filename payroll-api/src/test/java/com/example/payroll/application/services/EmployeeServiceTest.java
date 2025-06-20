@@ -102,25 +102,6 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void shouldAddContractToEmployee() {
-        Employee emp = createEmployee(1L, EMP_NAME);
-        LocalDate localDate = LocalDate.now();
-        Contract contract = new Contract(10L, new BigDecimal(5000L), localDate, localDate.plusDays(10), true);
-
-        Employee expected = emp.assignContract(contract);
-        Mockito.when(employeeRepository.findById(emp.id())).thenReturn(Optional.of(emp));
-        Mockito.when(employeeRepository.save(expected)).thenReturn(expected);
-
-        Employee result = payrollService.assignContract(contract, emp.id());
-        assertThat(expected.name()).isEqualTo(result.name());
-        assertThat(expected.cpf()).isEqualTo(result.cpf());
-        assertThat(expected.contract().active()).isEqualTo(result.contract().active());
-        assertThat(expected.contract().salary()).isEqualTo(result.contract().salary());
-        assertThat(expected.contract().startDate()).isEqualTo(result.contract().startDate());
-        assertThat(expected.contract().endDate()).isEqualTo(result.contract().endDate());
-    }
-
-    @Test
     public void shouldAddBankAccountToEmployee() {
         Employee emp = createEmployee(1L, EMP_NAME);
         BankAccount bankAccount = new BankAccount("123", "1");
@@ -153,10 +134,9 @@ class EmployeeServiceTest {
             assertThat(e).isInstanceOf(EmployeeNotFoundException.class);
             assertThat(e.getMessage()).isEqualTo("Could not find employee 1");
         }
-
     }
 
     private Employee createEmployee(long id, String name) {
-        return new Employee(id, name, "cpf123", null, null);
+        return new Employee(id, name, "cpf123", null);
     }
 }

@@ -4,7 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.example.payroll.application.services.EmployeeService;
-import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import java.util.List;
@@ -50,12 +49,6 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     EntityModel<Employee> assignBankAccount(@PathVariable("id") Long id, @RequestBody BankAccount bankAccount) {
         return createEntityModel(employeeService.assignBankAccount(bankAccount, id));
-    }
-
-    @PatchMapping("{id}/contract")
-    @ResponseStatus(HttpStatus.OK)
-    EntityModel<Employee> assignBankAccount(@PathVariable("id") Long id, @RequestBody Contract contract) {
-        return createEntityModel(employeeService.assignContract(contract, id));
     }
 
     @GetMapping("/{id}")
