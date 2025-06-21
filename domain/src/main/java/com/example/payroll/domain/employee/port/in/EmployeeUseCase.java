@@ -1,5 +1,6 @@
 package com.example.payroll.domain.employee.port.in;
 
+import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
 import java.util.Collection;
@@ -18,4 +19,5 @@ public interface EmployeeUseCase {
 
     Employee assignBankAccount(BankAccount bankAccount, Long id);
 
+    Employee assignContracts(Collection<Contract> contracts, Long id);
 }

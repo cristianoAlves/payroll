@@ -24,7 +24,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Collection<Employee> findAll() {
-        List<EmployeeEntity> all = employeeRepositoryJpa.findAll();
+        List<EmployeeEntity> all = employeeRepositoryJpa.findAllWithContracts();
         return all.stream()
             .map(employeeMapper::fromEntity)
             .toList();
@@ -32,7 +32,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Optional<Employee> findById(Long id) {
-        return employeeRepositoryJpa.findById(id)
+        return employeeRepositoryJpa.findByIdWithContracts(id)
             .map(employeeMapper::fromEntity);
     }
 

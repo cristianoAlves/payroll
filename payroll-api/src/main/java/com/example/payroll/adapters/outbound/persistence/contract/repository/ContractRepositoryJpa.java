@@ -12,9 +12,12 @@ import org.springframework.stereotype.Repository;
 public interface ContractRepositoryJpa extends JpaRepository<ContractEntity, Long> {
 
     @Query("""
-        select ce from ContractEntity ce
-        
+        SELECT c FROM ContractEntity c
+        LEFT JOIN EmployeeEntity e on  (e.id = c.employeeId)
+        WHERE e.id = :employeeId AND
+              c.active = true AND
+              (:startDate <= c.endDate OR c.endDate IS NULL) AND
+              (:endDate >= c.startDate OR c.startDate IS NULL)
         """)
-    List<ContractEntity> findOverlappingContracts(@Param("employeeId") Long id,
-        @Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate);
+    List<ContractEntity> findOverlappingContracts(@Param("employeeId") Long employeeId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
