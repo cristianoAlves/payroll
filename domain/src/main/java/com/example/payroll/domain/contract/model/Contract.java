@@ -8,6 +8,7 @@ public record Contract(
     BigDecimal salary,
     LocalDate startDate,
     LocalDate endDate,
-    boolean active) {
+    boolean active
+) {
 
 }

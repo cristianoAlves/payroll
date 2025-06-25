@@ -1,12 +1,17 @@
-package com.example.payroll.adapters.inbound.rest;
+package com.example.payroll.adapters.inbound.rest.controllers;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.example.payroll.application.services.EmployeeService;
+import com.example.payroll.adapters.inbound.rest.dto.ContractRequest;
+import com.example.payroll.adapters.inbound.rest.dto.EmployeeRequest;
+import com.example.payroll.adapters.inbound.rest.validators.ValidationFactory;
+import com.example.payroll.adapters.outbound.persistence.employee.mapper.EmployeeMapper;
 import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.model.BankAccount;
 import com.example.payroll.domain.employee.model.Employee;
+import com.example.payroll.domain.employee.port.in.EmployeeUseCase;
+import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -27,12 +32,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeUseCase employeeUseCase;
+    private final EmployeeMapper mapper;
+    private final ValidationFactory validationFactory;
 
     @GetMapping
     CollectionModel<EntityModel<Employee>> all() {
 
-        List<EntityModel<Employee>> employees = employeeService.getAllEmployees().stream()
+        List<EntityModel<Employee>> employees = employeeUseCase.getAllEmployees().stream()
             .map(this::createEntityModel)
             .toList();
 
@@ -42,31 +49,35 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    EntityModel<Employee> newEmployee(@RequestBody Employee newEmployee) {
-        return createEntityModel(employeeService.saveEmployee(newEmployee));
+    EntityModel<Employee> newEmployee(@RequestBody EmployeeRequest newEmployee) {
+        validationFactory.getValidators(newEmployee)
+            .forEach(v -> v.validate(newEmployee));
+        return createEntityModel(employeeUseCase.saveEmployee(mapper.fromRequest(newEmployee)));
     }
 
     @PatchMapping("/{id}/bank-account")
     @ResponseStatus(HttpStatus.OK)
     EntityModel<Employee> assignBankAccount(@PathVariable("id") Long id, @RequestBody BankAccount bankAccount) {
-        return createEntityModel(employeeService.assignBankAccount(bankAccount, id));
+        return createEntityModel(employeeUseCase.assignBankAccount(bankAccount, id));
     }
 
-    @PatchMapping("{id}/contract")
+    @PatchMapping("/{id}/contracts")
     @ResponseStatus(HttpStatus.OK)
-    EntityModel<Employee> assignBankAccount(@PathVariable("id") Long id, @RequestBody Contract contract) {
-        return createEntityModel(employeeService.assignContract(contract, id));
+    EntityModel<Employee> assignContracts(@PathVariable("id") Long id, @RequestBody Collection<Contract> contracts) {
+        ContractRequest requestToBeValidated = new ContractRequest(id, contracts);
+        validationFactory.getValidators(requestToBeValidated)
+            .forEach(v -> v.validate(requestToBeValidated));
+        return createEntityModel(employeeUseCase.assignContracts(contracts, id));
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     EntityModel<Employee> one(@PathVariable("id") Long id) {
-        return createEntityModel(employeeService.getById(id));
+        return createEntityModel(employeeUseCase.getById(id));
     }
 
     private EntityModel<Employee> createEntityModel(Employee employee) {
         return EntityModel.of(employee,
-            linkTo(methodOn(EmployeeController.class).one(employee.id())).withSelfRel(),
-            linkTo(methodOn(EmployeeController.class).all()).withRel("employees"));
+            linkTo(methodOn(EmployeeController.class).one(employee.id())).withSelfRel());
     }
 }

@@ -17,8 +17,7 @@ public interface EmployeeUseCase {
 
     void removeEmployee(Long id);
 
-    Employee assignContract(Contract contract, Long id);
-
     Employee assignBankAccount(BankAccount bankAccount, Long id);
 
+    Employee assignContracts(Collection<Contract> contracts, Long id);
 }

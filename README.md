@@ -12,7 +12,7 @@
   * Start and end date
   * Salary
   * Status (active/inactive)
-  * Validate overlapping or expired contracts
+* Validate overlapping or expired contracts
 
 ### 💵 Payroll Processing
 * Generate payroll monthly or on-demand

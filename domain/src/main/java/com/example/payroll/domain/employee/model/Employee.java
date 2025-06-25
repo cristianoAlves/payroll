@@ -1,22 +1,24 @@
 package com.example.payroll.domain.employee.model;
 
 import com.example.payroll.domain.contract.model.Contract;
+import java.util.Collection;
 
 public record Employee(
     Long id,
     String name,
     String cpf,
     BankAccount bankAccount,
-    Contract contract
+    Collection<Contract> contracts
 ) {
 
-    @SuppressWarnings("checkstyle:hiddenfield")
-    public Employee assignContract(Contract contract) {
-        return new Employee(this.id, this.name, this.cpf, this.bankAccount, contract);
+    @SuppressWarnings("checkstyle:hiddenField")
+    public Employee assignBankAccount(BankAccount bankAccount) {
+        return new Employee(this.id, this.name, this.cpf, bankAccount, this.contracts);
     }
 
-    @SuppressWarnings("checkstyle:hiddenfield")
-    public Employee assignBankAccount(BankAccount bankAccount) {
-        return new Employee(this.id, this.name, this.cpf, bankAccount, this.contract);
+    @SuppressWarnings("checkstyle:hiddenField")
+    public Employee assignContracts(Collection<Contract> contracts) {
+        this.contracts.addAll(contracts);
+        return new Employee(this.id, this.name, this.cpf, this.bankAccount, this.contracts);
     }
 }

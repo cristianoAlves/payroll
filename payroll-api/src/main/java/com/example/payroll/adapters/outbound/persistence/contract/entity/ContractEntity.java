@@ -41,5 +41,9 @@ public class ContractEntity {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
     private boolean active;
+
+    @Column(name = "employee_id")
+    private Long employeeId;
 }
