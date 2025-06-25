@@ -42,7 +42,7 @@ public class ContractValidator implements PayrollValidatorStrategy<ContractReque
 
     private void doValidateRequestContractsWhichOverlapWithSavedContracts(ContractRequest dto) {
         log.info("Validating request contracts for overlaps with saved contracts");
-        Map<Contract, List<Contract>> overlap = contractValidationUseCase.overlap(dto.contracts(), dto.employeeId());
+        Map<String, List<Contract>> overlap = contractValidationUseCase.overlap(dto.contracts(), dto.employeeId());
 
         if (!overlap.isEmpty()) {
             log.error("Some contracts overlap with others already saved for this employee. Overlaps: [{}]", overlap);
@@ -52,7 +52,7 @@ public class ContractValidator implements PayrollValidatorStrategy<ContractReque
 
     private void doValidateRequestContractsWhichOverlapEachOthers(Collection<Contract> contracts) {
         log.info("Validating request contracts for overlaps");
-        Map<Contract, List<Contract>> overlappedRequestContracts = contractValidationUseCase.overlap(contracts);
+        Map<String, List<Contract>> overlappedRequestContracts = contractValidationUseCase.overlap(contracts);
 
         if (!overlappedRequestContracts.isEmpty()) {
             log.error("Some of the given contracts overlap with each other. Overlaps: [{}]", overlappedRequestContracts);

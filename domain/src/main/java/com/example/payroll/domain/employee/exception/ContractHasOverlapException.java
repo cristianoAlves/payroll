@@ -6,7 +6,14 @@ import java.util.Map;
 
 public class ContractHasOverlapException extends RuntimeException {
 
-    public ContractHasOverlapException(Map<Contract, List<Contract>> contracts, String message) {
-        super(String.format(message + " [%s]", contracts));
+    private final Map<String, List<Contract>> contracts;
+
+    public ContractHasOverlapException(Map<String, List<Contract>> contracts, String message) {
+        super(message);
+        this.contracts = contracts;
+    }
+
+    public Map<String, List<Contract>> getContracts() {
+        return contracts;
     }
 }

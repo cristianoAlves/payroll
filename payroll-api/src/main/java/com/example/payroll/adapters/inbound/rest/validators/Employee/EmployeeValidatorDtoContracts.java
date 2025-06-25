@@ -32,7 +32,7 @@ public class EmployeeValidatorDtoContracts implements PayrollValidatorStrategy<E
     }
 
     private void doValidate(Collection<Contract> contracts) {
-        Map<Contract, List<Contract>> overlappedRequestContracts = contractValidationUseCase.overlap(contracts);
+        Map<String, List<Contract>> overlappedRequestContracts = contractValidationUseCase.overlap(contracts);
 
         if (!overlappedRequestContracts.isEmpty()) {
             log.error("Some of the given contracts overlap with each other. Overlaps: [{}]", overlappedRequestContracts);
