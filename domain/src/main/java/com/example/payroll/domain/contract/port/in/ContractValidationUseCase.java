@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface ContractValidationUseCase {
 
-    Map<Contract, List<Contract>> overlap(Collection<Contract> contracts, Long employeeId);
+    Map<String, List<Contract>> overlap(Collection<Contract> contracts, Long employeeId);
 
-    Map<Contract, List<Contract>> overlap(Collection<Contract> contracts);
+    Map<String, List<Contract>> overlap(Collection<Contract> contracts);
 
     boolean isExpired(Contract contract);
 }

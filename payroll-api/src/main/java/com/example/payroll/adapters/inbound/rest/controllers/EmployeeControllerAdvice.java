@@ -1,9 +1,15 @@
 package com.example.payroll.adapters.inbound.rest.controllers;
 
+import com.example.payroll.adapters.inbound.rest.dto.PayrollErrorResponse;
+import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.exception.ContractHasOverlapException;
 import com.example.payroll.domain.employee.exception.EmployeeNotFoundException;
 import com.example.payroll.domain.employee.exception.EmployeeWithSameCpfException;
 import com.example.payroll.domain.employee.exception.PayrollGenericException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,43 +23,47 @@ public class EmployeeControllerAdvice {
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String employeeNotFoundHandler(EmployeeNotFoundException ex) {
+    PayrollErrorResponse employeeNotFoundHandler(EmployeeNotFoundException ex) {
         log.error("employeeNotFound: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, Collections.emptyMap());
     }
 
     @ExceptionHandler(EmployeeWithSameCpfException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String employeeWithSameCpfExceptionHandler(EmployeeWithSameCpfException ex) {
+    PayrollErrorResponse employeeWithSameCpfExceptionHandler(EmployeeWithSameCpfException ex) {
         log.error("EmployeeWithSameCpfException: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, Collections.emptyMap());
     }
 
     @ExceptionHandler(PayrollGenericException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String genericExceptionHandler(PayrollGenericException ex) {
+    PayrollErrorResponse genericExceptionHandler(PayrollGenericException ex) {
         log.error("Payroll Generic Exception: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, Collections.emptyMap());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+    PayrollErrorResponse illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         log.error("Payroll IllegalArgumentException: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, Collections.emptyMap());
     }
 
     @ExceptionHandler(ContractHasOverlapException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String contractHasOverlapExceptionHandler(ContractHasOverlapException ex) {
+    PayrollErrorResponse contractHasOverlapExceptionHandler(ContractHasOverlapException ex) {
         log.error("Payroll ContractHasOverlapException: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, ex.getContracts());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String notReadableExceptionHandler(HttpMessageNotReadableException ex) {
+    PayrollErrorResponse notReadableExceptionHandler(HttpMessageNotReadableException ex) {
         log.error("Required request body is missing: {}", ex.getMessage());
-        return ex.getMessage();
+        return createPayrollResponse(ex, Map.of());
+    }
+
+    private <T extends RuntimeException> PayrollErrorResponse createPayrollResponse(T ex, Map<String, List<Contract>> metadata) {
+        return new PayrollErrorResponse(ex.getMessage(), LocalDateTime.now(), metadata);
     }
 }

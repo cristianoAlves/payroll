@@ -38,11 +38,11 @@ public class ContractValidatorTest extends BaseTest {
 
         Contract contract = createContract(10L, startDate, endDate);
         ContractRequest request = new ContractRequest(22L, List.of(contract));
-        when(contractValidationUseCaseMock.overlap(any(), any())).thenReturn(Map.of(contract, List.of(contract)));
+        when(contractValidationUseCaseMock.overlap(any(), any())).thenReturn(Map.of(contract.toString(), List.of(contract)));
 
         ContractHasOverlapException exception = assertThrows(ContractHasOverlapException.class,
             () -> contractValidatorMock.validate(request));
-        assertThat(exception.getMessage()).isEqualTo(String.format("Some of these contracts overlap with already saved ones. [{Contract[id=10, salary=1000, startDate=%s, endDate=%s, active=true]=[Contract[id=10, salary=1000, startDate=%s, endDate=%s, active=true]]}]", startDate, endDate, startDate, endDate));
+        assertThat(exception.getMessage()).isEqualTo("Some of these contracts overlap with already saved ones.");
     }
 
     @Test
@@ -55,8 +55,7 @@ public class ContractValidatorTest extends BaseTest {
 
         ContractHasOverlapException exception = assertThrows(ContractHasOverlapException.class,
             () -> contractValidator.validate(request));
-        assertThat(exception.getMessage()).isEqualTo(String.format("Some of the given contracts overlap with each other [{Contract[id=10, salary=1000, startDate=%s, endDate=%s, active=true]=[Contract[id=10, salary=1000, startDate=%s, endDate=%s, active=true], Contract[id=10, salary=1000, startDate=%s, endDate=%s, active=true]]}]",
-            startDate, endDate, startDate, endDate, startDate, endDate));
+        assertThat(exception.getMessage()).isEqualTo("Some of the given contracts overlap with each other");
     }
 
     @Test
