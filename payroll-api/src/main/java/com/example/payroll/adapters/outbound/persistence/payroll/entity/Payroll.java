@@ -1,7 +1,9 @@
 package com.example.payroll.adapters.outbound.persistence.payroll.entity;
 
 import com.example.payroll.adapters.outbound.persistence.employee.entity.EmployeeEntity;
+import com.example.payroll.adapters.outbound.persistence.payroll.entity.tax.DeductionsEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,5 +44,14 @@ public class Payroll {
     private EmployeeEntity employee;
 
     private LocalDate period;
-    private BigDecimal salary;
+
+    @Column(name = "gross_salary")
+    private BigDecimal grossSalary;
+
+    @Column(name = "net_salary")
+    private BigDecimal netSalary;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "deductions_id")
+    private DeductionsEntity deductions;
 }
