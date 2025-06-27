@@ -127,7 +127,7 @@
             <column name="end_date" type="DATE">
                 <constraints nullable="true"/>
             </column>
-            <column name="salary" type="BIGINT">
+            <column name="salary" type="DECIMAL">
                 <constraints nullable="false"/>
             </column>
             <column name="active" type="BOOLEAN">
@@ -149,7 +149,23 @@
           constraintName="fk_contract_employee"/>
     </changeSet>
 
+    <!-- Create deductions table -->
     <changeSet id="202506171006" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="deductions"/>
+            </not>
+        </preConditions>
+
+        <!-- Create deductions table -->
+        <createTable tableName="deductions">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202506171007" author="alvcris">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="payroll_seq"/>
@@ -166,14 +182,14 @@
     </changeSet>
 
     <!-- Create payroll table -->
-    <changeSet id="202506171007" author="alvcris">
+    <changeSet id="202506171008" author="alvcris">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="payroll"/>
             </not>
         </preConditions>
 
-        <!-- Create contract table -->
+        <!-- Create payroll table -->
         <createTable tableName="payroll">
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -185,13 +201,78 @@
             <column name="period" type="DATE">
                 <constraints nullable="false"/>
             </column>
-            <column name="salary" type="BIGINT">
+            <column name="gross_salary" type="DECIMAL">
                 <constraints nullable="false"/>
+            </column>
+            <column name="net_salary" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deductions_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_payroll_deductions"
+                  referencedTableName="deductions" referencedColumnNames="id"/>
             </column>
         </createTable>
         <addDefaultValue
           tableName="payroll"
           columnName="id"
           defaultValueComputed="nextval('payroll_seq')"/>
+    </changeSet>
+
+    <!-- Create taxes table -->
+    <changeSet id="202506171009" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="taxes"/>
+            </not>
+        </preConditions>
+
+        <!-- Create taxes table -->
+        <createTable tableName="taxes">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="DECIMAL(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deduction_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_tax_deductions"
+                  referencedTableName="deductions" referencedColumnNames="id"/>
+            </column>
+            <column name="tax_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Create withholding_rate table -->
+    <changeSet id="202506171010" author="alvcris">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="withholding_rate"/>
+            </not>
+        </preConditions>
+
+        <!-- Create withholding_rate table -->
+        <createTable tableName="withholding_rate">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="min" type="DECIMAL(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max" type="DECIMAL(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="DECIMAL(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_withholding_rate_tax"
+                  referencedTableName="taxes" referencedColumnNames="id"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

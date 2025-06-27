@@ -8,6 +8,7 @@ public record Payroll(
     Long id,
     Employee employee,
     LocalDate period,
-    BigDecimal salary) {
-
+    BigDecimal grossSalary,
+    BigDecimal netSalary,
+    Deductions deductions) {
 }
