@@ -16,6 +16,7 @@
 
 ### 💵 Payroll Processing
 * Generate payroll monthly or on-demand
+  * Coordinates the logic needed to generate a payslip for a given employee and period.
 * Calculate:
   * Gross salary
   * Deductions (e.g., INSS, taxes)

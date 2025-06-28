@@ -3,6 +3,7 @@ package com.example.payroll.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.qos.logback.core.testUtil.RandomUtil;
+import com.example.payroll.BaseTest;
 import com.example.payroll.adapters.inbound.rest.dto.PayrollErrorResponse;
 import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.employee.model.BankAccount;
@@ -35,16 +36,13 @@ import org.springframework.test.context.jdbc.SqlConfig;
     executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
     config = @SqlConfig(transactionMode = SqlConfig.TransactionMode.ISOLATED)
 )
-public class EmployeeManagementIntegrationTest {
+public class EmployeeManagementIntegrationTest extends BaseTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Autowired
     private EmployeeUseCase useCase;
-
-    private static final LocalDate START_DATE = LocalDate.now();
-    private static final LocalDate END_DATE = START_DATE.plusDays(10);
 
     @Test
     void shouldCreateAndReturnEmployee() {
@@ -237,11 +235,7 @@ public class EmployeeManagementIntegrationTest {
         assertThat(response.getBody()).isNotNull();
     }
 
-    private Employee createEmployeeFull() {
-        return new Employee(null, "name", "cpf-" + RandomUtil.getPositiveInt(),
-            createBankAccount(), List.of(createContract(START_DATE, END_DATE))
-        );
-    }
+
 
     private Employee createEmployee(Long id) {
         return new Employee(id, "name", "cpf-" + RandomUtil.getPositiveInt(),
@@ -258,14 +252,6 @@ public class EmployeeManagementIntegrationTest {
     private Employee createEmployee(List<Contract> contracts) {
         return new Employee(null, "name", "cpf-" + RandomUtil.getPositiveInt(),
             createBankAccount(), contracts);
-    }
-
-    private BankAccount createBankAccount() {
-        return new BankAccount("account", "branch");
-    }
-
-    private Contract createContract(LocalDate startDate, LocalDate endDate) {
-        return new Contract(null, new BigDecimal(1000), startDate, endDate, true);
     }
 
     private Contract createContract(Long id, LocalDate startDate, LocalDate endDate) {

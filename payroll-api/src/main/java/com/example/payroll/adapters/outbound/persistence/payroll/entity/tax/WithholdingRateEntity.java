@@ -25,15 +25,20 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class WithholdingRateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Include
     private BigDecimal min;
+
+    @EqualsAndHashCode.Include
     private BigDecimal max;
+
+    @EqualsAndHashCode.Include
     private BigDecimal rate;
 
     @ManyToOne

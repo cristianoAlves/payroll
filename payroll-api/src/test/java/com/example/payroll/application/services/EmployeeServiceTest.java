@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
 
-public class EmployeeServiceTest extends BaseTest {
+public class EmployeeServiceTest extends BaseServiceTest {
 
     private static final String EMP_NAME = "Alice";
 

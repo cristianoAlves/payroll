@@ -21,9 +21,9 @@ public abstract class TaxMapper {
                 toDomainWithholdings(inss.getWithholdings())
             );
         }
-
         throw new IllegalArgumentException("Unknown tax type: " + taxEntity.getClass());
     }
 
+    // Abstract method still processed by MapStruct
     protected abstract List<WithholdingRate> toDomainWithholdings(List<WithholdingRateEntity> entities);
 }

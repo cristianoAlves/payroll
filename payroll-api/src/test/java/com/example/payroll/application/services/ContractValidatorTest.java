@@ -19,7 +19,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class ContractValidatorTest extends BaseTest {
+public class ContractValidatorTest extends BaseServiceTest {
 
     @Mock
     private ContractValidationUseCase contractValidationUseCaseMock;
@@ -27,7 +27,7 @@ public class ContractValidatorTest extends BaseTest {
     @InjectMocks
     private ContractValidator contractValidatorMock;
 
-    private final ContractMapper mapper = Mappers.getMapper(ContractMapper.class);
+    private final ContractMapper mapper = getMapper(ContractMapper.class);
     private final ContractValidationUseCase contractValidationUseCase = new ContractValidationService(null, mapper);
     private final ContractValidator contractValidator = new ContractValidator(contractValidationUseCase);
 
