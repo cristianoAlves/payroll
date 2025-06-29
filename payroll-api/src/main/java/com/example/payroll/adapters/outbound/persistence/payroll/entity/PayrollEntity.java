@@ -32,7 +32,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class Payroll {
+public class PayrollEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payroll_seq")

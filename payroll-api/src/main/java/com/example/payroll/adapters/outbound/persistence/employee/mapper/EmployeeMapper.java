@@ -14,6 +14,4 @@ public abstract class EmployeeMapper {
     public abstract Employee fromRequest(EmployeeRequest request);
 
     public abstract EmployeeEntity fromEmployee(Employee employee);
-
-    public abstract EmployeeRequest toRequest(Employee employee);
 }

@@ -10,12 +10,16 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "taxes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tax_type")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 public abstract class TaxEntity {
 
     @Id
