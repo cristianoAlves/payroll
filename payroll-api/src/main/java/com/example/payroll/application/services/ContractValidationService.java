@@ -1,6 +1,5 @@
 package com.example.payroll.application.services;
 
-import com.example.payroll.adapters.outbound.persistence.contract.mapper.ContractMapper;
 import com.example.payroll.domain.contract.model.Contract;
 import com.example.payroll.domain.contract.port.in.ContractValidationUseCase;
 import com.example.payroll.domain.contract.port.out.ContractRepository;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 public class ContractValidationService implements ContractValidationUseCase {
 
     private final ContractRepository repository;
-    private final ContractMapper mapper;
 
     @Override
     public Map<String, List<Contract>> overlap(Collection<Contract> contractsToBeVerified, Long employeeId) {
