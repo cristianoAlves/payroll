@@ -27,8 +27,7 @@ public class ContractValidatorTest extends BaseServiceTest {
     @InjectMocks
     private ContractValidator contractValidatorMock;
 
-    private final ContractMapper mapper = getMapper(ContractMapper.class);
-    private final ContractValidationUseCase contractValidationUseCase = new ContractValidationService(null, mapper);
+    private final ContractValidationUseCase contractValidationUseCase = new ContractValidationService(null);
     private final ContractValidator contractValidator = new ContractValidator(contractValidationUseCase);
 
     @Test
