@@ -34,6 +34,7 @@ public class DeductionsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "deduction_id")
     private List<TaxEntity> deductionTax = new ArrayList<>();

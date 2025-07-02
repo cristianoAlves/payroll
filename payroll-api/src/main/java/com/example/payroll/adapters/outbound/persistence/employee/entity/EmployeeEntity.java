@@ -48,6 +48,7 @@ public class EmployeeEntity {
     @JoinColumn(name = "bank_account_id")
     private BankAccountEntity bankAccount;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "employee_id")
     private List<ContractEntity> contracts = new ArrayList<>();
