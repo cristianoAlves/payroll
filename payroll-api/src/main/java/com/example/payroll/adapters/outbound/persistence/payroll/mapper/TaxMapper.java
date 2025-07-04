@@ -18,7 +18,9 @@ public abstract class TaxMapper {
             return new InssTax(
                 inss.getId(),
                 inss.getName(),
-                toDomainWithholdings(inss.getWithholdings())
+                toDomainWithholdings(inss.getWithholdings()),
+                inss.getValidFrom(),
+                inss.getValidTo()
             );
         }
         throw new IllegalArgumentException("Unknown tax type: " + taxEntity.getClass());

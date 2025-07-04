@@ -3,8 +3,10 @@ package com.example.payroll.adapters.outbound.persistence.payroll.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.payroll.adapters.outbound.persistence.BaseMapperTest;
+import com.example.payroll.adapters.outbound.persistence.payroll.entity.tax.InssTaxEntity;
 import com.example.payroll.adapters.outbound.persistence.payroll.entity.tax.TaxEntity;
 import com.example.payroll.adapters.outbound.persistence.payroll.entity.tax.WithholdingRateEntity;
+import com.example.payroll.domain.payroll.model.InssTax;
 import com.example.payroll.domain.payroll.model.Tax;
 import com.example.payroll.domain.payroll.model.WithholdingRate;
 import java.util.List;
@@ -22,8 +24,12 @@ class TaxMapperTest extends BaseMapperTest {
     }
 
     private void validateTax(Tax tax, TaxEntity taxEntity) {
-        assertThat(tax.id()).isEqualTo(taxEntity.getId());
-        assertThat(tax.name()).isEqualTo(taxEntity.getName());
+        InssTaxEntity inssTaxEntity = (InssTaxEntity) taxEntity;
+        InssTax inssTax = (InssTax) tax;
+        assertThat(inssTax.id()).isEqualTo(inssTaxEntity.getId());
+        assertThat(inssTax.name()).isEqualTo(inssTaxEntity.getName());
+        assertThat(inssTax.getValidTo()).isEqualTo(inssTaxEntity.getValidTo());
+        assertThat(inssTax.getValidFrom()).isEqualTo(inssTaxEntity.getValidFrom());
     }
 
     @Test
