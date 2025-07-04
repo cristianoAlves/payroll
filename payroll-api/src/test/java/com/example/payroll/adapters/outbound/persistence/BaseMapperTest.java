@@ -12,6 +12,7 @@ import com.example.payroll.adapters.outbound.persistence.payroll.entity.tax.With
 import com.example.payroll.domain.employee.model.Employee;
 import com.example.payroll.domain.payroll.model.Deductions;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -58,6 +59,8 @@ public class BaseMapperTest extends BaseTest {
     protected TaxEntity createTaxEntity() {
         return InssTaxEntity.builder()
             .withholdings(List.of(createWithHoldings()))
+            .validFrom(LocalDate.now())
+            .validTo(LocalDate.now())
             .build();
     }
 

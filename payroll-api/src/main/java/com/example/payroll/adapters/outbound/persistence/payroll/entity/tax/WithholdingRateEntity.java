@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Represents one bracket of the tax (e.g., 0.00 to 1412.00 at 7.5%)
+ */
 @Entity
 @Table(name = "withholding_rate")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
